@@ -1,0 +1,3 @@
+[submodule "yournextrepresentative"]
+	path = yournextrepresentative
+	url = git://github.com/mysociety/yournextrepresentative
