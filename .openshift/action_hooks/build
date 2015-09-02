@@ -99,6 +99,7 @@ sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' general.yml.in > general.yml
 # save environment variables
 envfile="$OPENSHIFT_DATA_DIR/extra-environ"
 # subshell to edit in place
+touch "$envfile"
 (
     rm $envfile
     (
