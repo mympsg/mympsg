@@ -3,6 +3,8 @@
 # install memcached into $OPENSHIFT_DATA_DIR
 
 optdir="$OPENSHIFT_DATA_DIR/opt"
+sassdir="$optdir/sass"
+
 
 
 install_pkg()
@@ -69,8 +71,6 @@ install_pkg()
 
 install_sass()
 {
-    local sassdir="$optdir/sass"
-
     (
         export GEM_HOME="$sassdir"
         export PATH="$GEM_HOME/bin:$PATH"
@@ -88,8 +88,10 @@ install_sass()
 
 install_sass
 
+cd $OPENSHIFT_REPO_DIR
 # install local config files into the proper paths
-ln -fs ../../general.yml \
-   -t $OPENSHIFT_REPO_DIR/yournextrepresentative/conf/
-ln -fs ../../local_settings.py \
-   -t $OPENSHIFT_REPO_DIR/yournextrepresentative/mysite/
+ln -fs ../../general.yml -t yournextrepresentative/conf/
+ln -fs ../../local_settings.py -t yournextrepresentative/mysite/
+
+# Generate general.yml with substitutions
+sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' general.yml.in > general.yml
