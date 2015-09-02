@@ -81,6 +81,7 @@ install_pkg()
                 ;;
 
             single-file)
+                mkdir -p "$prefix"
                 mv "$archive" -t "$prefix"
                 ;;
 
