@@ -9,3 +9,6 @@ openshift_keys = (
 )
 for key, destkey in openshift_keys:
     defaultdb[key] = os.environ['OPENSHIFT_POSTGRESQL_DB_' + destkey]
+
+PIPELINE_SASS_BINARY = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],
+                                    'opt', 'sass', 'bin', 'sass')
