@@ -36,8 +36,8 @@ def get_application():
         return application_
 
     prepare()
-    from django.core.handlers.wsgi import WSGIHandler
-    application_ = WSGIHandler()
+    from mysite.wsgi import application
+    application_ = application
 
     return application_
 
