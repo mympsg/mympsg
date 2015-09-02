@@ -5,21 +5,43 @@
 optdir="$OPENSHIFT_DATA_DIR/opt"
 sassdir="$optdir/sass"
 
+extract_archive()
+{
+    local destdir="$1" \
+          archive="$2"
 
+    mkdir -p "$destdir"
+
+    echo "Extracting $archive into $destdir"
+    case "$archive" in
+        *.tar.*)
+            tar -C "$destdir" --strip-components=1 -xaf "$archive"
+            ;;
+
+        *.zip)
+            unzip -d "$destdir" "$archive"
+            ;;
+
+        *)
+            echo "Unknown archive format for $archive"
+            return 1
+            ;;
+    esac
+}
 
 install_pkg()
 {
     local pkg="$1" \
           version="$2" \
           url_template="$3" \
-          from_source="$4"
+          mode="$4"
     local builddir="$OPENSHIFT_TMP_DIR/$pkg-$version" \
           prefix="$optdir/$pkg"
 
-    shift 4   # everything else is to be passed to configure
+    shift 4   # everything else is a custom arg
 
-    if [ -d "$prefix" ]; then
-        echo "$prefix exists. Skipping compilation..."
+    if [ -d "$prefix" -a "$(cat "$prefix/.version")" = "$version"; then
+        echo "$pkg is up to date at version $version"
         return 0
     fi
 
@@ -33,34 +55,43 @@ install_pkg()
         mkdir "$builddir"
 
         eval "local url=$url_template"
-        local tarball="$pkg-$version.tar.gz"
+        local archive="$pkg-$version.$suffix"
 
-        echo "Downloading $pkg from $url to $OPENSHIFT_TMP_DIR/$tarball"
+        echo "Downloading $pkg from $url to $OPENSHIFT_TMP_DIR/$archive"
 
         cd "$OPENSHIFT_TMP_DIR"
-        curl -L -o "$tarball" "$url"
+        curl -L -o "$archive" "$url"
 
-        echo "Extracting $tarball"
-        tar -C "$builddir" --strip-components=1 -xzvf "$pkg-$version.tar.gz"
+        case "$mode" in
+            source-archive)
+                extract_archive "$builddir" "$archive"
 
-        if [ "$from_source" = y ]; then
-            echo "Compiling"
-            cd "$builddir"
+                echo "Compiling"
+                cd "$builddir"
 
-            sh configure --prefix="$prefix" "$@"
-            make -j$(grep -c ^processor /proc/cpuinfo)
+                sh configure --prefix="$prefix" "$@"
+                make -j$(grep -c ^processor /proc/cpuinfo)
 
-            echo "Installing into $prefix"
-            make install
+                echo "Installing into $prefix"
+                make install
+                ;;
 
-        else
-            echo "Not from_source, so directly moving into $prefix"
-            mv -T "$builddir" "$prefix"
-        fi
+            binary-archive)
+                extract_archive "$prefix" "$archive"
+                ;;
+
+            single-file)
+                mv "$archive" -t "$prefix"
+                ;;
+
+            *)
+                ;;
+        esac
     )
 
     ret=$?
     if [ $ret -eq 0 ]; then
+        echo "$version" > "$prefix/.version"
         echo "Successfully installed $pkg-$version"
     else
         echo "Installation of $pkg-$version failed"
@@ -86,29 +117,44 @@ install_sass()
     )
 }
 
-install_sass
+setup_ynr_config()
+{
+    cd $OPENSHIFT_REPO_DIR
+    # install local config files into the proper paths
+    ln -fs ../../general.yml -t yournextrepresentative/conf/
+    ln -fs ../../local_settings.py -t yournextrepresentative/mysite/
 
-cd $OPENSHIFT_REPO_DIR
-# install local config files into the proper paths
-ln -fs ../../general.yml -t yournextrepresentative/conf/
-ln -fs ../../local_settings.py -t yournextrepresentative/mysite/
+    # Generate general.yml with substitutions
+    sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' general.yml.in > general.yml
+}
 
-# Generate general.yml with substitutions
-sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' general.yml.in > general.yml
+dump_env()
+{
+    local envfile="$OPENSHIFT_DATA_DIR/extra-environ"
 
-# save environment variables
-envfile="$OPENSHIFT_DATA_DIR/extra-environ"
-# subshell to edit in place
-touch "$envfile"
-(
-    rm $envfile
+    touch "$envfile"
+
+    # subshell to edit in place
     (
-        grep -E -v '^(export )?(OPTDIR|SASSDIR|GEM_HOME|GEM_PATH)' -
-        cat <<EOF
+        rm $envfile
+        (
+            grep -E -v '^(export )?(OPTDIR|SASSDIR|GEM_HOME|GEM_PATH)' -
+            cat <<EOF
 export OPTDIR='$optdir'
 export SASSDIR='$sassdir'
 export GEM_HOME='$sassdir'
 export GEM_PATH=''
 EOF
-    ) > $envfile
-) < $envfile
+        ) > $envfile
+    ) < $envfile
+}
+
+install_pkg \
+    yuicompressor \
+    2.4.8 \
+    'https://github.com/yui/$pkg/releases/download/v$version/$pkg-$version.jar' \
+    single-file
+install_sass
+
+setup_ynr_config
+dump_env
