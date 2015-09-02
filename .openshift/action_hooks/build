@@ -95,3 +95,19 @@ ln -fs ../../local_settings.py -t yournextrepresentative/mysite/
 
 # Generate general.yml with substitutions
 sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' general.yml.in > general.yml
+
+# save environment variables
+envfile="$OPENSHIFT_DATA_DIR/extra-environ"
+# subshell to edit in place
+(
+    rm $envfile
+    (
+        grep -E -v '^(export )?(OPTDIR|SASSDIR|GEM_HOME|GEM_PATH)' -
+        cat <<EOF
+export OPTDIR='$optdir'
+export SASSDIR='$sassdir'
+export GEM_HOME='$sassdir'
+export GEM_PATH=''
+EOF
+    ) > $envfile
+) < $envfile

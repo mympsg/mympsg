@@ -15,6 +15,7 @@ manage() {
     runcmd python "$managepy" "$@"
 }
 
+. $OPENSHIFT_DATA_DIR/extra-environ
 
 # gather all the static files in one place
 manage collectstatic --noinput
