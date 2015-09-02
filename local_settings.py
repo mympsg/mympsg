@@ -1,5 +1,11 @@
 import os
 
 defaultdb = DATABASES['default']
-for key in ('USER', 'PASSWORD', 'HOST', 'PORT'):
-    defaultdb[key] = os.environ['OPENSHIFT_POSTGRESQL_DB_' + key]
+openshift_keys = (
+    ('USER', 'USERNAME'),
+    ('PASSWORD', 'PASSWORD'),
+    ('HOST', 'HOST'),
+    ('PORT', 'PORT'),
+)
+for key, destkey in openshift_keys:
+    defaultdb[key] = os.environ['OPENSHIFT_POSTGRESQL_DB_' + destkey]
