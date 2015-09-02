@@ -1,0 +1,24 @@
+#!/bin/bash
+# This deploy hook gets executed after dependencies are resolved and the
+# build hook has been run but before the application has been started back
+# up again.  This script gets executed directly, so it could be python, php,
+# ruby, etc.
+
+runcmd() {
+    echo "Executing '$*'"
+    "$@"
+}
+
+managepy="$OPENSHIFT_REPO_DIR/yournextrepresentative/manage.py"
+
+manage() {
+    runcmd python "$managepy" "$@"
+}
+
+
+# gather all the static files in one place
+manage collectstatic --noinput
+
+# Compile all translations from .po files into .mo files
+manage compilemessages
+manage compilejsi18n

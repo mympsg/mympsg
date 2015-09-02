@@ -1,0 +1,89 @@
+#!/bin/bash
+# Script cannibalized from https://github.com/zfdang/memcached-in-openshift to
+# install memcached into $OPENSHIFT_DATA_DIR
+
+optdir="$OPENSHIFT_DATA_DIR/opt"
+
+
+install_pkg()
+{
+    local pkg="$1" \
+          version="$2" \
+          url_template="$3" \
+          from_source="$4"
+    local builddir="$OPENSHIFT_TMP_DIR/$pkg-$version" \
+          prefix="$optdir/$pkg"
+
+    shift 4   # everything else is to be passed to configure
+
+    if [ -d "$prefix" ]; then
+        echo "$prefix exists. Skipping compilation..."
+        return 0
+    fi
+
+    (
+        set -e        # Die on error
+
+        echo "Cleaning up $builddir if it exists"
+        rm -rf "$builddir"
+
+        echo "Creating $builddir"
+        mkdir "$builddir"
+
+        eval "local url=$url_template"
+        local tarball="$pkg-$version.tar.gz"
+
+        echo "Downloading $pkg from $url to $OPENSHIFT_TMP_DIR/$tarball"
+
+        cd "$OPENSHIFT_TMP_DIR"
+        curl -L -o "$tarball" "$url"
+
+        echo "Extracting $tarball"
+        tar -C "$builddir" --strip-components=1 -xzvf "$pkg-$version.tar.gz"
+
+        if [ "$from_source" = y ]; then
+            echo "Compiling"
+            cd "$builddir"
+
+            sh configure --prefix="$prefix" "$@"
+            make -j$(grep -c ^processor /proc/cpuinfo)
+
+            echo "Installing into $prefix"
+            make install
+
+        else
+            echo "Not from_source, so directly moving into $prefix"
+            mv -T "$builddir" "$prefix"
+        fi
+    )
+
+    ret=$?
+    if [ $ret -eq 0 ]; then
+        echo "Successfully installed $pkg-$version"
+    else
+        echo "Installation of $pkg-$version failed"
+    fi
+
+    return $ret
+}
+
+install_sass()
+{
+    local sassdir="$optdir/sass"
+
+    (
+        export GEM_HOME="$sassdir"
+        export PATH="$GEM_HOME/bin:$PATH"
+
+        if (sass --version | grep '3\.2\.19') > /dev/null
+        then
+            echo sass is already installed at the correct version
+        else
+            echo Installing sass...
+            gem install --no-ri --no-rdoc sass -v 3.2.19
+            echo done.
+        fi
+    )
+}
+
+install_sass
