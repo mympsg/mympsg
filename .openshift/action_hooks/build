@@ -87,3 +87,9 @@ install_sass()
 }
 
 install_sass
+
+# install local config files into the proper paths
+ln -fs ../../general.yml \
+   -t $OPENSHIFT_REPO_DIR/yournextrepresentative/conf/
+ln -fs ../../local_settings.py \
+   -t $OPENSHIFT_REPO_DIR/yournextrepresentative/mysite/
