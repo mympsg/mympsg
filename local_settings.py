@@ -12,3 +12,5 @@ for key, destkey in openshift_keys:
 
 PIPELINE_SASS_BINARY = os.path.join(os.environ['OPENSHIFT_DATA_DIR'],
                                     'opt', 'sass', 'bin', 'sass')
+PIPELINE_YUI_BINARY = os.path.join(os.path.dirname(__file__),
+                                   'bin', 'yui-compressor')
