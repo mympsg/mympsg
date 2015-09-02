@@ -1,0 +1,103 @@
+# -*- yaml -*-
+# Is this a staging or development server? Set STAGING to 1 if so,
+# otherwise set 0 for a production site
+STAGING: '1'
+
+# This can be either 'postgresql' or 'sqlite':
+DATABASE_SYSTEM: 'postgresql'
+
+# These settings are for when you've set 'postgresql' as the
+# DATABASE_SYSTEM above, otherwise (if you're using 'sqlite')
+# they're ignored.
+YNMP_DB_USER: ''
+YNMP_DB_NAME: ''
+YNMP_DB_PASS: ''
+YNMP_DB_PORT: ''
+YNMP_DB_HOST: ''
+
+# Which election is this installation for? (This must be the name of a
+# package in the 'elections' package, at the moment one of
+# uk_general_election_2015 or ar_elections_2015):
+ELECTION_APP: 'uk_general_election_2015'
+
+# Default language/timezone of the installation
+LANGUAGE_CODE: 'en-sg'
+TIME_ZONE: 'Asia/Singapore'
+
+# The path to the gems directory:
+GEMS_DIRECTORY: ''
+
+# The PopIt instance login details
+POPIT_INSTANCE: yournextmp
+POPIT_HOSTNAME: popit.mysociety.org
+
+# If you're using the new-style PopIt login, where you generate an API
+# then set POPIT_API_KEY and leave POPIT_USER and POPIT_PASSWORD blank.
+POPIT_API_KEY: 'f093903b7a1aa9688b36241502beadc7'
+
+# Conversely, if you're using the old-style login, where you have a
+# single username and password for the instance, set POPIT_USER and
+# POPIT_PASSWORD but make POPIT_API_KEY blank.
+POPIT_USER: someone@example.org
+POPIT_PASSWORD: popitinstancepassword
+
+# SECRET_KEY should be a random string of characters
+SECRET_KEY: '098nadkafy123asidftqaer0aoejfoasdfa'
+
+# For a public server, you should restrict this to the hostnames
+# that the site will actually be hosted at.
+ALLOWED_HOSTS:
+  - '*'
+
+# The email address that will be displayed on the site as the contact
+# email for all support requests, and so on:
+SUPPORT_EMAIL: hpillay@redhat.com
+
+# The email addresses that error emails will be sent to, e.g.:
+# ADMINS:
+#   - ['Example User A', 'alice@example.org']
+#   - ['Example User B', 'bob@example.org']
+ADMINS:
+- ['Chow Loong Jin', 'lchow@redhat.com']
+
+# The From: address for error emails
+SERVER_EMAIL: no-reply@mymp.sg
+
+# The From: address for all emails except error emails
+DEFAULT_FROM_EMAIL: no-reply@mymp.sg
+
+# You can use Google analytics by changing this to your Google
+# analytics tracking ID:
+GOOGLE_ANALYTICS_ACCOUNT: ''
+
+# If you set this to true then the protocol of image URLs will be set
+# rewritten from http to https.
+FORCE_HTTPS_IMAGES: false
+
+# Set this to true if you're running the site behind nginx for SSL
+# termination; this will cause the SECURE_PROXY_SSL_HEADER Django
+# setting to be set to ('HTTP_X_FORWARDED_PROTO', 'https') and tell
+# django-allauth to generate https URLs.
+NGINX_SSL: false
+
+# If you need to customize where the generated CSV files are output
+# then set this to the path of a directory. If it is set to null, then
+# a default location is used (a 'media' directory in the top level of
+# the repository).
+MEDIA_ROOT: null
+
+# If this is true, you have to be in the 'Trusted to Rename' group in
+# order to change the name of a candidate:
+RESTRICT_RENAMES: false
+
+# If this is set to false, then no new accounts may be created - you
+# might want this past a certain point in the election to reduce
+# opportunities for "drive-by" malicious edits.
+NEW_ACCOUNTS_ALLOWED: true
+
+# If this is set to false, then no edits of people are allowed.
+EDITS_ALLOWED: true
+
+# This should be set to true unless you're using the old version of
+# Google Analytics.
+USE_UNIVERSAL_ANALYTICS: true
