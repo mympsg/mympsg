@@ -18,3 +18,11 @@ PIPELINE_YUI_BINARY = os.path.join(os.environ['OPENSHIFT_REPO_DIR'],
 
 STATIC_ROOT = os.path.join(os.environ['OPENSHIFT_REPO_DIR'],
                            'wsgi', 'static')
+
+CACHES = {
+    'default': {
+        'TIMEOUT': None, # cache keys never expire; we invalidate them
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'mysite',
+    }
+}
