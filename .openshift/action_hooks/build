@@ -34,11 +34,12 @@ install_pkg()
     local pkg="$1" \
           version="$2" \
           url_template="$3" \
-          mode="$4"
+          mode="$4" \
+          suffix="$5"
     local builddir="$OPENSHIFT_TMP_DIR/$pkg-$version" \
           prefix="$optdir/$pkg"
 
-    shift 4   # everything else is a custom arg
+    shift 5   # everything else is a custom arg
 
     if [ -d "$prefix" -a "$(cat "$prefix/.version")" = "$version" ]; then
         echo "$pkg is up to date at version $version"
@@ -154,7 +155,8 @@ install_pkg \
     yuicompressor \
     2.4.8 \
     'https://github.com/yui/$pkg/releases/download/v$version/$pkg-$version.jar' \
-    single-file
+    single-file \
+    jar
 install_sass
 
 setup_ynr_config
