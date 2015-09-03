@@ -127,7 +127,11 @@ setup_ynr_config()
     ln -fs ../../local_settings.py -t yournextrepresentative/mysite/
 
     # Generate general.yml with substitutions
-    sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' general.yml.in > general.yml
+    sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' \
+        -e 's,@POPIT_INSTANCE@,'"$POPIT_INSTANCE"',g' \
+        -e 's,@POPIT_API_KEY@,'"$POPIT_API_KEY"',g' \
+        -e 's,@DJANGO_SECRET_KEY@,"$DJANGO_SECRET_KEY,g' \
+        general.yml.in > general.yml
 }
 
 dump_env()

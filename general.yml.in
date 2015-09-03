@@ -28,21 +28,21 @@ TIME_ZONE: 'Asia/Singapore'
 GEMS_DIRECTORY: @SASS_DIRECTORY@
 
 # The PopIt instance login details
-POPIT_INSTANCE: yournextmp
+POPIT_INSTANCE: @POPIT_INSTANCE@
 POPIT_HOSTNAME: popit.mysociety.org
 
 # If you're using the new-style PopIt login, where you generate an API
 # then set POPIT_API_KEY and leave POPIT_USER and POPIT_PASSWORD blank.
-POPIT_API_KEY: 'f093903b7a1aa9688b36241502beadc7'
+POPIT_API_KEY: @POPIT_API_KEY@
 
 # Conversely, if you're using the old-style login, where you have a
 # single username and password for the instance, set POPIT_USER and
 # POPIT_PASSWORD but make POPIT_API_KEY blank.
-POPIT_USER: someone@example.org
-POPIT_PASSWORD: popitinstancepassword
+POPIT_USER: ''
+POPIT_PASSWORD: ''
 
 # SECRET_KEY should be a random string of characters
-SECRET_KEY: '098nadkafy123asidftqaer0aoejfoasdfa'
+SECRET_KEY: @DJANGO_SECRET_KEY@
 
 # For a public server, you should restrict this to the hostnames
 # that the site will actually be hosted at.
