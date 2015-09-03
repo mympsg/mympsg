@@ -2,7 +2,7 @@
 
 . "$OPENSHIFT_DATA_DIR/extra-environ"
 
-YUI_DIR="$optdir/yuicompressor/"
+YUI_DIR="$OPTDIR/yuicompressor/"
 YUI_JAR="$YUI_DIR/yuicompressor"-*.jar
 
 java -jar $YUI_JAR $extra_args "$@"
