@@ -19,6 +19,7 @@ manage() {
 
 # update db
 manage syncdb --noinput
+manage createcachetable
 
 # gather all the static files in one place
 manage collectstatic --noinput
