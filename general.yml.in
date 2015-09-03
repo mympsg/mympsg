@@ -18,7 +18,7 @@ YNMP_DB_HOST: ''
 # Which election is this installation for? (This must be the name of a
 # package in the 'elections' package, at the moment one of
 # uk_general_election_2015 or ar_elections_2015):
-ELECTION_APP: 'uk_general_election_2015'
+ELECTION_APP: 'sg_general_election_2015'
 
 # Default language/timezone of the installation
 LANGUAGE_CODE: 'en-sg'
