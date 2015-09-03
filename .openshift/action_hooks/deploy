@@ -17,6 +17,9 @@ manage() {
 
 . $OPENSHIFT_DATA_DIR/extra-environ
 
+# update db
+manage syncdb --noinput
+
 # gather all the static files in one place
 manage collectstatic --noinput
 
