@@ -130,7 +130,7 @@ setup_ynr_config()
     sed -e 's,@SASS_DIRECTORY@,'"$sassdir"',g' \
         -e 's,@POPIT_INSTANCE@,'"$POPIT_INSTANCE"',g' \
         -e 's,@POPIT_API_KEY@,'"$POPIT_API_KEY"',g' \
-        -e 's,@DJANGO_SECRET_KEY@,"$DJANGO_SECRET_KEY,g' \
+        -e 's,@DJANGO_SECRET_KEY@,'"$DJANGO_SECRET_KEY"',g' \
         general.yml.in > general.yml
 }
 
