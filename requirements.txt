@@ -14,7 +14,7 @@ django-debug-toolbar-template-timings==0.6.4
 django-nose==1.4.1
 django-pipeline==1.5.1
 #django-statici18n==1.1.3
--e git+https://github.com/hyperair/django-statici18n.git@05562a37a5a1694612f406b4196eef93ac5f6cfe#egg=django-statici18n
+-e git+https://github.com/hyperair/django-statici18n.git@575ecbf74a025740e143705cb3b8ec3e8c34d4f4#egg=django-statici18n
 django-webtest==1.7.7
 docutils==0.10
 -e git+https://github.com/django-extensions/django-extensions.git@44a39ccd882b31381c3da63861d70f0b3b5690f8#egg=django-extensions
