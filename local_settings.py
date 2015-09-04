@@ -26,3 +26,5 @@ CACHES = {
         'LOCATION': 'mysite',
     }
 }
+
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
