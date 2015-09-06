@@ -27,4 +27,9 @@ CACHES = {
     }
 }
 
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.mandrillapp.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.environ['MANDRILL_API_USER']
+EMAIL_HOST_PASSWORD = os.environ['MANDRILL_API_KEY']
+EMAIL_USE_TLS = True
